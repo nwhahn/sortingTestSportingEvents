@@ -8,6 +8,7 @@ if(status!== 'ok') throw new Error('Input not ok');
 const sportingEvents = Object.values(sporting_events).map((e) => ({...e, isSlate: false}));
 const slateEvents = Object.values(slate_events).map((e) => ({...e, isSlate: true}));
 
+// Combine all events
 const events = sportingEvents.concat(slateEvents);
 
 const reducedEvents = events.reduce((prev = {}, curr) => {
@@ -16,7 +17,7 @@ const reducedEvents = events.reduce((prev = {}, curr) => {
   const isAM = time.includes('AM');
   const [hour] = time.split(' ')[0].split(':')
   let parsedHour = 0;
-
+  // Transform time
   if(isAM){
     if(hour !== '12'){
       parsedHour += parseInt(hour);
@@ -34,6 +35,7 @@ const reducedEvents = events.reduce((prev = {}, curr) => {
     ...curr,
     date: generatedDate,
   }
+  // Hint string to seperate out events cleanly
   const hintKey = `${szTournamentDisplayName}|${isSlate ? szDescriptor : teams}|${segmentType || segment}`;
   if(prev[hintKey]){
     prev[hintKey].event.push(valueToCommit);
@@ -49,6 +51,7 @@ const reducedEvents = events.reduce((prev = {}, curr) => {
   return prev;
 }, {})
 
+// transform gameType to bestOf value
 const getBestOf = (szGameType) => {
   switch(szGameType){
     case 'bo3':
@@ -60,6 +63,7 @@ const getBestOf = (szGameType) => {
   }
 }
 
+// transform segment to segmentKey
 const generateSegmentKey = (segment) => {
 
   switch(segment){
